@@ -31,9 +31,7 @@ function App() {
   return (
     <div className="App">
       <div className="search_nav">
-        <div className="title">
-          <h1>Netfleet</h1>
-        </div>
+        <h1 className="title">Netfleet</h1>
         <div className="search_box">
           <form onSubmit={handleSearch}>
             <input onChange={(e) => setTerm(e.target.value)} />
