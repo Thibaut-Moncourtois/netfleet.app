@@ -11,6 +11,8 @@ function App() {
 
   const [movies, setMovies] = useState([]);
   const [term, setTerm] = useState("");
+  const [searched, setSearched] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     fetch(API_URL)
@@ -18,14 +20,25 @@ function App() {
       .then((data) => setMovies(data.results));
   }, []);
 
-  console.log(movies);
+  /* const handleSearch = (e) => {
+    e.preventDefault();
+
+    fetch(API_SEARCH + term)
+      .then((res) => res.json())
+      .then((data) => setMovies(data.results));
+  }; */
+
+  const moviesItems = movies.map((movie) => <li>{movie.title}</li>);
 
   const handleSearch = (e) => {
     e.preventDefault();
 
     fetch(API_SEARCH + term)
       .then((res) => res.json())
-      .then((data) => setMovies(data.results));
+      .then((data) => {
+        setMovies(data.results);
+        setSearched(true);
+      });
   };
 
   return (
@@ -36,15 +49,18 @@ function App() {
           <form onSubmit={handleSearch}>
             <input onChange={(e) => setTerm(e.target.value)} />
             <button>Search</button>
+            {term && <ul>{moviesItems}</ul>}
           </form>
         </div>
       </div>
-
-      <div className="movies">
-        {movies.map((movie) => (
-          <MovieCard key={movie.id} {...movie} />
-        ))}
-      </div>
+      {searched && (
+        <div className="movies">
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} {...movie} />
+          ))}
+        </div>
+      )}
+      ;
     </div>
   );
 }
